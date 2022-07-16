@@ -35,9 +35,12 @@ router.post('/add', auth, async (req, res) => {
         "customer_name": req.user.firstName,
         "customer_email": req.user.email,
         "customer_phone": req.user.phoneNumber? req.user.phoneNumber : "+918297997256"
+      },
+      "order_meta":{
+        "notify_url": process.env.BASE_URL + "order/checkPayment"
       } 
     }
-    
+    console.log(body)
     let response = await makePostCashfreeAsyncCall(process.env.CASHFREE_BASE_URL + "pg/orders", body);
 
     const orderDoc = await order.save();
@@ -69,6 +72,7 @@ router.post('/add', auth, async (req, res) => {
       order: { _id: orderDoc._id }
     });
   } catch (error) {
+    console.log(error)
     res.status(400).json({
       error: 'Your request could not be processed. Please try again.'
     });
@@ -122,6 +126,22 @@ router.post('/checkPayment', async (req, res)=>{
     return;
   }
   
+})
+
+router.post('/handleCashfreeWebhook', async (req, res)=>{
+  var body = req.body.data;
+  console.log(body)
+  if(body.payment.payment_status === "PAYMENT_SUCCESS"){
+    let od = await Order.findById({_id : body.order.order_id});
+    od.updateOne({_id : body.order.order_id}, {paymentStatus: "PAYMENT_SUCCESS"})
+    res.status(200).json({
+      success: true
+    });
+  }else{
+    res.status(200).json({
+      success: false
+    });
+  }
 })
 
 // search orders api
