@@ -334,7 +334,8 @@ router.get('/:orderId', auth, async (req, res) => {
       products: orderDoc?.cart?.products,
       cartId: orderDoc.cart._id,
       paymentStatus: orderDoc?.paymentStatus,
-      paymentLink: orderDoc?.paymentLink
+      paymentLink: orderDoc?.paymentLink,
+      updates: orderDoc?.updates
     };
 
     order = store.caculateTaxAmount(order);

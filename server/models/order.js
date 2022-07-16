@@ -21,6 +21,9 @@ const OrderSchema = new Schema({
     type: Number,
     default: 0
   },
+  updates:{
+    type:String
+  },
   updated: Date,
   created: {
     type: Date,

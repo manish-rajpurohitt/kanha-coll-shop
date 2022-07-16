@@ -56,20 +56,7 @@ const OrderItems = props => {
     } else if (item.status !== 'Cancelled') {
       if (!isAdmin) {
         return (
-          <DropdownConfirm label='Cancel'>
-            <div className='d-flex flex-column align-items-center justify-content-center p-2'>
-              <p className='text-center mb-2'>{`Are you sure you want to cancel ${item.product?.name}.`}</p>
-              <Button
-                variant='danger'
-                id='CancelOrderItemPopover'
-                size='sm'
-                text='Confirm Cancel'
-                role='menuitem'
-                className='cancel-order-btn'
-                onClick={() => updateOrderItemStatus(item._id, 'Cancelled')}
-              />
-            </div>
-          </DropdownConfirm>
+          <></>
         );
       } else {
         return (
@@ -115,7 +102,7 @@ const OrderItems = props => {
                           </Link>
                           <div className='d-flex align-items-center justify-content-between'>
                             <span className='price'>
-                              {item.purchasePrice || item.product.price}
+                            ₹{item.purchasePrice || item.product.price}
                             </span>
                           </div>
                         </>
@@ -134,7 +121,7 @@ const OrderItems = props => {
                       </p>
                       <p>
                         Total Price
-                        <span className='order-label'>{` ${item.totalPrice}`}</span>
+                        <span className='order-label'>{` ₹${item.totalPrice}`}</span>
                       </p>
                     </div>
                   </div>
@@ -152,7 +139,7 @@ const OrderItems = props => {
                   </div>
 
                   <div className='text-center'>
-                    <p className='order-label'>{` $${item.totalPrice}`}</p>
+                    <p className='order-label'>{` ₹${item.totalPrice}`}</p>
 
                     <p>Total Price</p>
                   </div>
