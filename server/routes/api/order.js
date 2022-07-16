@@ -130,10 +130,13 @@ router.post('/checkPayment', async (req, res)=>{
 
 router.post('/handleCashfreeWebhook', async (req, res)=>{
   var body = req.body.data;
-  console.log(body)
-  if(body.payment.payment_status === "PAYMENT_SUCCESS"){
+  console.log(body.order.order_id)
+  console.log(body.payment.payment_status)
+
+
+  if(body.payment.payment_status === "SUCCESS"){
     let od = await Order.findById({_id : body.order.order_id});
-    od.updateOne({_id : body.order.order_id}, {paymentStatus: "PAYMENT_SUCCESS"})
+    await Order.updateOne({_id : body.order.order_id}, {paymentStatus: "PAYMENT_SUCCESS"})
     res.status(200).json({
       success: true
     });
