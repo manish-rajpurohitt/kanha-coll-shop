@@ -37,7 +37,7 @@ router.post('/add', auth, async (req, res) => {
         "customer_phone": req.user.phoneNumber? req.user.phoneNumber : "+918297997256"
       },
       "order_meta":{
-        "notify_url": process.env.BASE_URL + "order/checkPayment"
+        "notify_url": process.env.BASE_URL + "order/handleCashfreeWebhook"
       } 
     }
     console.log(body)
