@@ -138,9 +138,9 @@ const config = {
       filename: 'css/[name].[hash].css'
     }),
     new WebpackPwaManifest({
-      name: 'MERN Store',
-      short_name: 'MERNStore',
-      description: 'MERN Store!',
+      name: 'Kanha Collection',
+      short_name: 'kanha-collection',
+      description: 'Kanha Collections business!',
       background_color: '#fff',
       theme_color: '#4a68aa',
       inject: true,
