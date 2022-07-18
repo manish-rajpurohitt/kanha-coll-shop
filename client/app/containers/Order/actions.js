@@ -131,7 +131,7 @@ export const fetchOrder = (id, withLoading = true) => {
       }
 
       const response = await axios.get(`/api/order/${id}`);
-
+      console.log(response)
       dispatch({
         type: FETCH_ORDER,
         payload: response.data.order
@@ -145,6 +145,7 @@ export const fetchOrder = (id, withLoading = true) => {
     }
   };
 };
+
 
 export const cancelOrder = () => {
   return async (dispatch, getState) => {

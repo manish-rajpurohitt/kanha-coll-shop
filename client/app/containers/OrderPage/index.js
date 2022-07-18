@@ -35,7 +35,8 @@ class OrderPage extends React.PureComponent {
       isLoading,
       cancelOrder,
       updateOrderItemStatus,
-      makePayment
+      makePayment,
+      addresses
     } = this.props;
 
     return (
@@ -49,6 +50,7 @@ class OrderPage extends React.PureComponent {
             cancelOrder={cancelOrder}
             makePayment={makePayment}
             updateOrderItemStatus={updateOrderItemStatus}
+            addresses={addresses}
             onBack={() => {
               if (window.location.toString().includes('success')) {
                 history.push('/dashboard/orders');
@@ -69,7 +71,8 @@ const mapStateToProps = state => {
   return {
     user: state.account.user,
     order: state.order.order,
-    isLoading: state.order.isLoading
+    isLoading: state.order.isLoading,
+    addresses: state.address.addresses
   };
 };
 

@@ -307,6 +307,7 @@ router.get(
     const payload = {
       id: req.user.id
     };
+    console.log(req);
 
     jwt.sign(payload, secret, { expiresIn: tokenLife }, (err, token) => {
       const jwt = `Bearer ${token}`;

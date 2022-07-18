@@ -21,8 +21,8 @@ const OrderMeta = props => {
 
     if (isNotDelivered && order.paymentStatus !== "PAYMENT_SUCCESS") {
       return <>
-      <Button size='sm' text='Cancel Order' onClick={cancelOrder} />
-      <Button size='sm' text='Make Payment' onClick={makePayment} />
+      <Button className="cancel-order-man" size='sm' text='Cancel Order' onClick={cancelOrder} />
+      <Button className="make-payment-man" size='sm' text='Make Payment' onClick={makePayment} />
       </>
     } else{
       return(

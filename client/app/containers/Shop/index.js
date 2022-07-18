@@ -38,6 +38,7 @@ class Shop extends React.PureComponent {
     const totalProducts = products.length;
     const left = limit * (currentPage - 1) + 1;
     const right = totalProducts + left - 1;
+    console.log(products)
 
     return (
       <div className='shop'>
