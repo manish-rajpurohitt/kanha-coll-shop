@@ -15,6 +15,7 @@ const {
   getStoreProductsQuery,
   getStoreProductsWishListQuery
 } = require('../../utils/queries');
+const Variant = require('../../models/variant');
 
 const storage = multer.memoryStorage();
 const upload = multer({ storage });
@@ -497,6 +498,63 @@ router.delete(
       });
     } catch (error) {
       res.status(400).json({
+        error: 'Your request could not be processed. Please try again.'
+      });
+    }
+  }
+);
+
+
+router.post(
+  '/addVariant',
+  auth,
+  role.checkRole(role.ROLES.Admin, role.ROLES.Merchant),
+  upload.array("ProductImg"),
+  async (req, res) => {
+    try {
+      const sku = req.body.sku;
+      const attributes = req.body.attributes;
+      const quantity = req.body.quantity;
+      const price = req.body.price;
+      const image = req.files;
+      
+      if (!sku) {
+        return res.status(400).json({ error: 'You must enter sku.' });
+      }
+
+      if (!quantity) {
+        return res.status(400).json({ error: 'You must enter a quantity.' });
+      }
+
+      if (!price) {
+        return res.status(400).json({ error: 'You must enter a price.' });
+      }
+
+      const foundProduct = await Product.findOne({ sku });
+
+      if (foundProduct) {
+        return res.status(400).json({ error: 'This sku is already in use.' });
+      }
+
+      const { imgObj } = await s3Upload(image);
+
+      const product = new Variant({
+        sku,
+        quantity,
+        price,
+        images : imgObj
+      });
+
+      const savedProduct = await product.save();
+
+      res.status(200).json({
+        success: true,
+        message: `Product has been added successfully!`,
+        product: savedProduct
+      });
+    } catch (error) {
+      console.log(error)
+      return res.status(400).json({
         error: 'Your request could not be processed. Please try again.'
       });
     }

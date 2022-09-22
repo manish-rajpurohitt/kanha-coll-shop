@@ -1,0 +1,7 @@
+---
+deployment:
+  tasks:
+    - sudo apt-get install npm
+    - npm run build
+    - export DEPLOYPATH=/home/user/public_html/
+    - /bin/cp ./dist $DEPLOYPATH
