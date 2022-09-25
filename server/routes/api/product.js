@@ -505,56 +505,45 @@ router.delete(
 );
 
 
-router.post(
-  '/addVariant',
+router.put(
+  '/addVariants/:id',
   auth,
-  role.checkRole(role.ROLES.Admin, role.ROLES.Merchant),
-  upload.array("ProductImg"),
+  role.checkRole(role.ROLES.Admin),
   async (req, res) => {
     try {
-      const sku = req.body.sku;
-      const attributes = req.body.attributes;
-      const quantity = req.body.quantity;
-      const price = req.body.price;
-      const image = req.files;
-      
-      if (!sku) {
-        return res.status(400).json({ error: 'You must enter sku.' });
-      }
-
-      if (!quantity) {
-        return res.status(400).json({ error: 'You must enter a quantity.' });
-      }
-
-      if (!price) {
-        return res.status(400).json({ error: 'You must enter a price.' });
-      }
-
-      const foundProduct = await Product.findOne({ sku });
-
-      if (foundProduct) {
-        return res.status(400).json({ error: 'This sku is already in use.' });
-      }
-
-      const { imgObj } = await s3Upload(image);
-
-      const product = new Variant({
-        sku,
-        quantity,
-        price,
-        images : imgObj
+      const query = { _id: req.params.id };
+      const update = req.body;
+      console.log(update);
+      await Product.findOneAndUpdate(query, {
+        variant: update
       });
-
-      const savedProduct = await product.save();
 
       res.status(200).json({
         success: true,
-        message: `Product has been added successfully!`,
-        product: savedProduct
+        message: 'Product has been updated successfully!'
       });
     } catch (error) {
       console.log(error)
       return res.status(400).json({
+        error: 'Your request could not be processed. Please try again.'
+      });
+    }
+  }
+);
+
+router.get(
+  '/getVariants/:id',
+  auth,
+  role.checkRole(role.ROLES.Admin, role.ROLES.Merchant),
+  async (req, res) => {
+    try {
+      const product = await Product.findOne({_id: req.params.id});
+
+      res.status(200).json({
+        variant: product.variant
+      });
+    } catch (error) {
+      res.status(400).json({
         error: 'Your request could not be processed. Please try again.'
       });
     }

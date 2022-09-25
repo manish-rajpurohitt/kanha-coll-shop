@@ -241,7 +241,7 @@ export const addProduct = () => {
       const rules = {
         sku: 'required|alpha_dash',
         name: 'required',
-        description: 'required|max:200',
+        description: 'required|max:5000',
         quantity: 'required|numeric',
         price: 'required|numeric',
         taxable: 'required',
@@ -339,7 +339,7 @@ export const updateProduct = () => {
         name: 'required',
         sku: 'required|alpha_dash',
         slug: 'required|alpha_dash',
-        description: 'required|max:200',
+        description: 'required|max:5000',
         quantity: 'required|numeric',
         price: 'required|numeric',
         taxable: 'required',
@@ -565,3 +565,37 @@ const getSortOrder = value => {
 
   return sortOrder;
 };
+
+export const addVariant = (variant, id) => {
+  return async (dispatch, getState) => {
+    try {
+      const response = await axios.put(`/api/product/addVariants/${id}`, variant);
+
+      const successfulOptions = {
+        title: `${response.data.message}`,
+        position: 'tr',
+        autoDismiss: 1
+      };
+
+      if (response.data.success === true) {
+        dispatch(success(successfulOptions));
+
+        //dispatch(goBack());
+      }
+    } catch (error) {
+      handleError(error, dispatch);
+    }
+  };
+}
+
+export const getVariants = (id) => {
+  return async (dispatch, getState) => {
+    try {
+      const response = await axios.get(`/api/product/getVariants/${id}`);
+      return response.data
+
+    } catch (error) {
+      handleError(error, dispatch);
+    }
+  };
+}

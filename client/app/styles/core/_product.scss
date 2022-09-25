@@ -115,6 +115,8 @@
 
           .item-desc {
             @include text-ellipsis(2);
+            white-space: pre-line;
+            white-space: pre-wrap;
           }
 
           .by {
@@ -178,6 +180,8 @@
       .item-desc {
         color: $font-custom-color !important;
         word-break: break-all;
+        white-space: pre-line;
+            white-space: pre-wrap;
       }
 
       .price {
@@ -233,6 +237,14 @@
   }
 }
 
+.variant{
+  display: flex;
+}
+
+.variant > select{
+  margin: 5px;
+  width: 150px;
+}
 .stock {
   font-weight: $font-weight-bold-one;
 }

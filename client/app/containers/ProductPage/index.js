@@ -19,10 +19,16 @@ import { BagIcon } from '../../components/Common/Icon';
 import ProductReviews from '../../components/Store/ProductReviews';
 import SocialShare from '../../components/Store/SocialShare';
 import SimpleImageSlider from "react-simple-image-slider";
+import product from '../../../../server/models/product';
 
 
 
 class ProductPage extends React.PureComponent {
+
+  constructor(props){
+    super(props);
+    this.state = {selectedVariant : product.variant ? product.variant.variantValues[0] : ""};
+  }
   componentDidMount() {
     const slug = this.props.match.params.slug;
     this.props.fetchStoreProduct(slug);
@@ -45,7 +51,11 @@ class ProductPage extends React.PureComponent {
     const getImages = () =>{
       let images = [];
       product.images.map(img => images.push(img.imageUrll))
+      
       return images;
+    }
+    const changeSelectedValue = (e) =>{
+
     }
     const {
       isLoading,
@@ -128,9 +138,21 @@ class ProductPage extends React.PureComponent {
                         }}
                       />
                     </div>
-                    <div className='my-4 item-share'>
-                      <SocialShare product={product} />
-                    </div>
+                    {
+                      product.variant ?
+                        <div className='item-customize'>
+                          <div className='variant'>
+                            <h4>{product.variant.variantType} : </h4>
+                            <select
+                              value={this.state.selectedVariant}
+                              onChange={(e)=>{this.setState({...this.state, selectedVariant: e.target.value})}}
+                            >
+                                <option>wdfa</option>
+                            </select>
+                          </div>
+                        </div> : <></>
+                    }
+                    
                     <div className='item-actions'>
                       {itemInCart ? (
                         <Button
@@ -156,6 +178,9 @@ class ProductPage extends React.PureComponent {
                           onClick={() => handleAddToCart(product)}
                         />
                       )}
+                    </div>
+                    <div className='my-4 item-share'>
+                      <SocialShare product={product} />
                     </div>
                   </div>
                 </div>
