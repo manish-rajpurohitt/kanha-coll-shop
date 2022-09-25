@@ -222,7 +222,6 @@ const calculatePurchaseQuantity = inventory => {
 export const fetchDefaultAddress = () => {
   return async (dispatch, getState) => {
     try {
-      console.log('here')
       // create cart id if there is no one
         const response = await axios.get(`/api/address`);
         console.log(response)
@@ -235,7 +234,25 @@ export const fetchDefaultAddress = () => {
 
 export const handleAddress = () => {
   return (dispatch, getState) => {
-    dispatch(push('/dashboard/address'));
+    dispatch(push('/dashboard/address/add'));
+    dispatch(toggleCart());
+  };
+}
+
+export const getMyDetails = () =>{
+  return async (dispatch, getState) => {
+    try{
+      const response = await axios.get(`/api/user/me`)
+      return response.data
+    }catch(ex){
+      handleError(ex, dispatch)
+    }
+  }
+}
+
+export const handleUserDetails = () => {
+  return (dispatch, getState) => {
+    dispatch(push('/dashboard'));
     dispatch(toggleCart());
   };
 }

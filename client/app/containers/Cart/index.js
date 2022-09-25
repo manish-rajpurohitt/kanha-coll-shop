@@ -28,7 +28,9 @@ class Cart extends React.PureComponent {
       placeOrder,
       authenticated,
       fetchDefaultAddress,
-      handleAddress
+      handleAddress,
+      getMyDetails,
+      handleUserDetails
     } = this.props;
 
     return (
@@ -69,6 +71,8 @@ class Cart extends React.PureComponent {
               authenticated={authenticated}
               fetchDefaultAddress={fetchDefaultAddress}
               handleAddress={handleAddress}
+              getMyDetails={getMyDetails}
+              handleUserDetails={handleUserDetails}
             />
           </div>
         )}

@@ -12,12 +12,14 @@ import Checkbox from '../../Common/Checkbox';
 import Input from '../../Common/Input';
 import Button from '../../Common/Button';
 
+
 const AddAddress = props => {
   const { addressFormData, formErrors, addressChange, addAddress } = props;
 
   const handleSubmit = event => {
     event.preventDefault();
     addAddress();
+    window.location.href = "/dashboard/address";
   };
 
   return (

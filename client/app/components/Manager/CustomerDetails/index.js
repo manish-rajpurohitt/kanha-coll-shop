@@ -25,12 +25,12 @@
     getUserDetailss()
 
     return ()=>{
-      
+
     }
    }, [])
  
    return (
-     <Col className='order-summary pt-3'>
+     <Col className='order-summary pt-3' style={{marginTop:"15px"}}>
        <h2>Customer Details</h2>
        <div className='d-flex align-items-center summary-item'>
          <p className='summary-label'>Name</p>
@@ -52,11 +52,6 @@
             <p className='summary-value ml-auto'>{userDetails.phoneNumber}</p>
           </div></>:<></>
         }
-       <hr />
-       <div className='d-flex align-items-center summary-item'>
-         <p className='summary-label'>Total</p>
-         <p className='summary-value ml-auto'>₹{order.totalWithTax}</p>
-       </div>
      </Col>
    );
  };
