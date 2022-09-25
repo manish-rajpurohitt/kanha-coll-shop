@@ -14,6 +14,7 @@ import Input from '../../Common/Input';
 import Switch from '../../Common/Switch';
 import Button from '../../Common/Button';
 import SelectOption from '../../Common/SelectOption';
+import axios from 'axios';
 
 const taxableSelect = [
   { value: 1, label: 'Yes' },
@@ -29,13 +30,53 @@ const EditProduct = props => {
     brands,
     updateProduct,
     deleteProduct,
-    activateProduct
+    activateProduct,
+    getVariants,
+    addVariant
   } = props;
 
   const handleSubmit = event => {
     event.preventDefault();
     updateProduct();
   };
+  const [variant, updateVariants] = React.useState({
+    variantType: "",
+    variantValues: []
+  })
+  React.useEffect(()=>{
+    const fetchVariants = async ()=>{ 
+      let data = await getVariants(product._id);
+      console.log(data)
+      updateVariants({
+        variantType: data.variant.variantType,
+        variantValues: data.variant.variantValues
+      });
+    }
+    fetchVariants();
+  }, [])
+  const handleVriantValueChange = (event, idx) =>{
+    let data = variant.variantValues;
+    console.log(event);
+    data[idx] = event.target.value;
+    updateVariants({...variant, variantValues: data})
+  }
+
+const handleRemoveVariantValue = (idx) =>{
+
+  let data = variant.variantValues.filter((s, sidx) => idx !== sidx);
+  updateVariants({...variant, variantValues: data})
+}
+
+const handleAddShareholder = () =>{
+  let data = variant.variantValues;
+  data.push("");
+  updateVariants({...variant, variantValues:data })
+  console.log(variant)
+}
+
+const saveVariants = () =>{
+  let res = addVariant(variant, product._id);
+}
 
   return (
     <div className='edit-product'>
@@ -45,7 +86,6 @@ const EditProduct = props => {
           {product.slug}
         </Link>
       </div>
-
       <form onSubmit={handleSubmit} noValidate>
         <Row>
           <Col xs='12'>
@@ -166,6 +206,47 @@ const EditProduct = props => {
                 activateProduct(product._id, value);
               }}
             />
+          </Col>
+          <Col xs='12' md='12' className='mt-3 mb-2'>
+          <Input
+              type={'text'}
+              error={formErrors['name']}
+              label={'Variant Type'}
+              name={'variantType'}
+              placeholder={'VAriant Type'}
+              value={variant.variantType}
+              onInputChange={(e) => {updateVariants({...variant, variantType: event.target.value})}}
+            />
+            <div>
+            <Button
+            text="+"
+              type="button"
+              onClick={() => handleAddShareholder()}
+              className="small"
+            /><Button
+            text="Save"
+              type="button"
+              onClick={() => saveVariants()}
+              className="small"
+            />
+            </div>
+            {variant.variantValues.map((variant, idx) => (
+              <div className="shareholder" key={idx}>
+                <Input
+                type={'text'}
+                placeholder={'Variant ' + idx + " value"}
+                value={variant}
+                onInputChange={(e)=>handleVriantValueChange(event, idx)}
+              />
+                <Button
+                text="-"
+                  type="button"
+                  onClick={() => handleRemoveVariantValue(idx)}
+                  className="small"
+                  color="red"
+                />
+              </div>
+            ))}
           </Col>
         </Row>
         <hr />

@@ -40,7 +40,9 @@ class Edit extends React.PureComponent {
       productEditChange,
       updateProduct,
       deleteProduct,
-      activateProduct
+      activateProduct,
+      addVariant,
+      getVariants
     } = this.props;
 
     return (
@@ -59,6 +61,8 @@ class Edit extends React.PureComponent {
             updateProduct={updateProduct}
             deleteProduct={deleteProduct}
             activateProduct={activateProduct}
+            addVariant={addVariant}
+            getVariants={getVariants}
           />
         ) : (
           <NotFound message='no product found.' />

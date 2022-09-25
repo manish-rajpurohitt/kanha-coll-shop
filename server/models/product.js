@@ -7,9 +7,16 @@ const options = {
   lang: 'en',
   truncate: 120
 };
-
 Mongoose.plugin(slug, options);
 
+const VariantSchema = new Schema({
+  variantType:{
+    type: String
+  },
+  variantValues:{
+    type: Array
+  }
+})
 // Product Schema
 const ProductSchema = new Schema({
   sku: {
@@ -44,6 +51,9 @@ const ProductSchema = new Schema({
   isActive: {
     type: Boolean,
     default: true
+  },
+  variant:{
+    type: VariantSchema
   },
   brand: {
     type: Schema.Types.ObjectId,
