@@ -207,16 +207,18 @@ export const updateOrderItemStatus = (itemId, status) => {
   };
 };
 
-export const addOrder = () => {
+export const addOrder = (selectedAddress) => {
   return async (dispatch, getState) => {
     try {
       const cartId = localStorage.getItem('cart_id');
       const total = getState().cart.cartTotal;
+      
 
       if (cartId) {
         const response = await axios.post(`/api/order/add`, {
           cartId,
-          total
+          total,
+          selectedAddress
         });
         window.open(response.data.payment)
         dispatch(push(`/order/success/${response.data.order._id}`));
@@ -228,7 +230,7 @@ export const addOrder = () => {
   };
 };
 
-export const placeOrder = () => {
+export const placeOrder = (selectedAddress) => {
   return (dispatch, getState) => {
     const token = localStorage.getItem('token');
 
@@ -236,7 +238,7 @@ export const placeOrder = () => {
 
     if (token && cartItems.length > 0) {
       Promise.all([dispatch(getCartId())]).then(() => {
-        dispatch(addOrder());
+        dispatch(addOrder(selectedAddress));
       });
     }
 
@@ -249,3 +251,16 @@ export const clearOrders = () => {
     type: CLEAR_ORDERS
   };
 };
+
+
+export const getOrderAddress = (addId) => {
+  return async (dispatch, getState) => {
+    try {
+      const response = await axios.get(`/api/address/${addId}`);
+      console.log(response);
+      return response.data;
+    } catch (error) {
+      handleError(error, dispatch);
+    } 
+  };
+}

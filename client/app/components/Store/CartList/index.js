@@ -12,7 +12,7 @@ import { Container, Row, Col } from 'reactstrap';
 import Button from '../../Common/Button';
 
 const CartList = props => {
-  const { cartItems, handleRemoveFromCart } = props;
+  const { cartItems, handleRemoveFromCart, fetchDefaultAddress } = props;
 
   const handleProductClick = () => {
     props.toggleCart();
@@ -73,6 +73,17 @@ const CartList = props => {
                   <p className='value quantity'>{` ${item.quantity}`}</p>
                 </Col>
               </Row>
+              {
+                item.variantSelected !== "" ?
+              <Row className='mb-2 align-items-center'>
+                <Col xs='9'>
+                  <p className='item-label'>Selected Variant</p>
+                </Col>
+                <Col xs='3' className='text-right'>
+                  <p className='value quantity'>{` ${item.variantSelected}`}</p>
+                </Col>
+              </Row> : <></>
+              }
             </Container>
           </div>
         </div>

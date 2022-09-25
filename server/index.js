@@ -5,6 +5,8 @@ const compression = require('compression');
 const cors = require('cors');
 const path = require('path');
 const helmet = require('helmet');
+const Mongoose = require('mongoose');
+const slug = require('mongoose-slug-generator');
 
 const keys = require('./config/keys');
 const routes = require('./routes');
@@ -15,7 +17,11 @@ const Razorpay = require('razorpay')
 
 const { port } = keys;
 const app = express();
-
+const options = {
+  separator: '-',
+  lang: 'en',
+  truncate: 120
+};
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(
@@ -34,6 +40,8 @@ cloudinary.config({
 });
 
 setupDB();
+Mongoose.plugin(slug, options);
+
 require('./config/passport')(app);
 app.use(routes);
 

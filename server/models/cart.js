@@ -24,6 +24,9 @@ const CartItemSchema = new Schema({
     type: Number,
     default: 0
   },
+  variantSelected:{
+    type: String
+  },
   status: {
     type: String,
     default: 'Not processed',

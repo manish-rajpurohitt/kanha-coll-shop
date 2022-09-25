@@ -70,3 +70,18 @@ export const searchUsers = filter => {
     }
   };
 };
+
+export const getUserDetails = id => {
+  return async (dispatch, getState) => {
+    try {
+      dispatch(setUserLoading(true));
+
+      const response = await axios.get(`/api/user/me`);
+      return response.data;
+    } catch (error) {
+      handleError(error, dispatch);
+    } finally {
+      dispatch(setUserLoading(false));
+    }
+  };
+}

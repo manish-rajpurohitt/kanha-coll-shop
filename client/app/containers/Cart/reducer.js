@@ -74,6 +74,11 @@ const cartReducer = (state = initialState, action) => {
       };
       return newState;
 
+      case "FETCH_ADDRESS":
+        newState = {
+          ...state,
+          address: action.payload
+        }
     default:
       return state;
   }

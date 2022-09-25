@@ -69,6 +69,7 @@ export const signUp = () => {
         ...newUser
       };
 
+      console.log(user)
       const response = await axios.post('/api/auth/register', user);
 
       const successfulOptions = {

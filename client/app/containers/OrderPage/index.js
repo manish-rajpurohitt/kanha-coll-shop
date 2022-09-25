@@ -36,7 +36,9 @@ class OrderPage extends React.PureComponent {
       cancelOrder,
       updateOrderItemStatus,
       makePayment,
-      addresses
+      addresses,
+      getUserDetails,
+      getOrderAddress
     } = this.props;
 
     return (
@@ -51,6 +53,8 @@ class OrderPage extends React.PureComponent {
             makePayment={makePayment}
             updateOrderItemStatus={updateOrderItemStatus}
             addresses={addresses}
+            getUserDetails={getUserDetails}
+            getOrderAddress={getOrderAddress}
             onBack={() => {
               if (window.location.toString().includes('success')) {
                 history.push('/dashboard/orders');
