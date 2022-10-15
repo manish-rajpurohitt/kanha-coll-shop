@@ -14,6 +14,7 @@ const orderRoutes = require('./order');
 const reviewRoutes = require('./review');
 const wishlistRoutes = require('./wishlist');
 const paymentRoutes = require("./payments");
+const whatsappRoutes = require("./whatsapp");
 
 // auth routes
 router.use('/auth', authRoutes);
@@ -56,5 +57,7 @@ router.use('/review', reviewRoutes);
 
 // Wishlist routes
 router.use('/wishlist', wishlistRoutes);
+
+router.use('/whatsapp', whatsappRoutes);
 
 module.exports = router;
