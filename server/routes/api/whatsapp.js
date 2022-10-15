@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const axios = require("axios");
+const fs = require("fs");
 // Imports dependencies and set up http server
 const request = require("request");
 const { Readable } = require("stream");
