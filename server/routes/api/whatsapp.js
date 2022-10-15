@@ -30,13 +30,13 @@ router.post("/webhook", async (req, res) => {
           let respu = await axios({
             method: "GET",
             url: "https://graph.facebook.com/v12.0/"+imgid,
-            headers: { "Authorization" : "Bearer " + "EAAJeOPXHxxABAJNDx9Qw6kxHZCPmJKZBeyotFj25wlqSiGqDWdgJYZApnjPMGtEuGHGB9XrAtmGfpZBj4QAWM9ZAkj8TzhZBojD8rSPWNMp92C0L5MG9WnXbEyFoA0dCii67L6aE6Y0XTAM1ZB6PJVz6EeDlrK6v4c3EcXZAOf2oyqEtDPBdZBZAbOLlDRQxb534ikJWLzZAfE58wZDZD"}
+            headers: { "Authorization" : "Bearer " + process.env.WHATSAPP_TOKEN}
           }).then(async data=>{
             console.log(data);
               await axios({
               method: "GET",
               url: data.data.url,
-              headers: { "Authorization" : "Bearer " + "EAAJeOPXHxxABAJNDx9Qw6kxHZCPmJKZBeyotFj25wlqSiGqDWdgJYZApnjPMGtEuGHGB9XrAtmGfpZBj4QAWM9ZAkj8TzhZBojD8rSPWNMp92C0L5MG9WnXbEyFoA0dCii67L6aE6Y0XTAM1ZB6PJVz6EeDlrK6v4c3EcXZAOf2oyqEtDPBdZBZAbOLlDRQxb534ikJWLzZAfE58wZDZD"},
+              headers: { "Authorization" : "Bearer " + process.env.WHATSAPP_TOKEN},
               responseType: 'arraybuffer'
             }).then(async resData=>{
               const outputFilename = 'file.jpg'
