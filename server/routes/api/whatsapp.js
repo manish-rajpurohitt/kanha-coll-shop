@@ -25,14 +25,14 @@ router.post("/webhook", async (req, res) => {
         let msg_body = req.body.entry[0].changes[0].value.messages[0] // extract the message text from the webhook payload
         if(msg_body.type !== "image") return;
          let imgid = msg_body.image.id;
-        console.log(msg_body, imgid);
+        
         
           let respu = await axios({
             method: "GET",
             url: "https://graph.facebook.com/v12.0/"+imgid,
             headers: { "Authorization" : "Bearer " + "EAAJeOPXHxxABAJNDx9Qw6kxHZCPmJKZBeyotFj25wlqSiGqDWdgJYZApnjPMGtEuGHGB9XrAtmGfpZBj4QAWM9ZAkj8TzhZBojD8rSPWNMp92C0L5MG9WnXbEyFoA0dCii67L6aE6Y0XTAM1ZB6PJVz6EeDlrK6v4c3EcXZAOf2oyqEtDPBdZBZAbOLlDRQxb534ikJWLzZAfE58wZDZD"}
           }).then(async data=>{
-            //console.log(data);
+            console.log(data);
               await axios({
               method: "GET",
               url: data.data.url,
@@ -42,18 +42,18 @@ router.post("/webhook", async (req, res) => {
               const outputFilename = 'file.jpg'
               let reff = await Buffer.from(resData.data, 'binary').toString('base64');
           
-                //console.log(reff)
+                console.log(reff)
               await fs.writeFileSync(outputFilename, Buffer.from(reff, 'base64'));
           
               await cloudinary.uploader
               .upload(outputFilename)
               .then(result=>console.log(result));
             }).catch(()=>{
-  
+              console.log("err");
             });
             
           }).catch(()=>{
-            
+            console.log("err")
           });
       
       }
