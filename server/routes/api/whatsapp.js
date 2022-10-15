@@ -35,7 +35,6 @@ router.post("/webhook", async (req, res) => {
             url: "https://graph.facebook.com/v12.0/"+imgid,
             headers: { "Authorization" : "Bearer " + process.env.WHATSAPP_TOKEN}
           }).then(async data=>{
-            console.log(data);
               await axios({
               method: "GET",
               url: data.data.url,
@@ -44,8 +43,7 @@ router.post("/webhook", async (req, res) => {
             }).then(async resData=>{
               const outputFilename = 'file.jpg'
               let reff = await Buffer.from(resData.data, 'binary').toString('base64');
-          
-                console.log(reff)
+
               await fs.writeFileSync(outputFilename, Buffer.from(reff, 'base64'));
           
               await cloudinary.uploader
@@ -60,7 +58,8 @@ router.post("/webhook", async (req, res) => {
                     "Content-Type" : "application/json"
                  },
                  data: { "messaging_product": "whatsapp", "to": "918297997256", "type": "template", "template": { "name": result.url, "language": { "code": "en_US" } } }
-                })
+                });
+                console.log(result);
               });
             }).catch((err)=>{
               console.log("err " + err);
