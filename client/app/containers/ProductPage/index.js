@@ -27,7 +27,7 @@ class ProductPage extends React.PureComponent {
 
   constructor(props){
     super(props);
-    this.state = {selectedVariant : product.variant ? product.variant.variantValues[0] : ""};
+    this.state = {selectedVariant : ""};
   }
   componentDidMount() {
     const slug = this.props.match.params.slug;
@@ -41,21 +41,22 @@ class ProductPage extends React.PureComponent {
       const slug = this.props.match.params.slug;
       this.props.fetchStoreProduct(slug);
     }
+    if(JSON.stringify(prevProps.product) !== JSON.stringify(this.props.product)){
+      this.setState({...this.state, selectedVariant: this.props.product.variant ? this.props.product.variant.variantValues[0] : ""})
+    }
+
   }
 
   componentWillUnmount() {
     document.body.classList.remove('product-page');
+
   }
   
   render() {
     const getImages = () =>{
       let images = [];
       product.images.map(img => images.push(img.imageUrll))
-      
       return images;
-    }
-    const changeSelectedValue = (e) =>{
-
     }
     const {
       isLoading,
@@ -74,6 +75,7 @@ class ProductPage extends React.PureComponent {
       reviewFormErrors
     } = this.props;
 
+    
     return (
       <div className='product-shop'>
         {isLoading ? (
@@ -145,9 +147,13 @@ class ProductPage extends React.PureComponent {
                             <h4>{product.variant.variantType} : </h4>
                             <select
                               value={this.state.selectedVariant}
-                              onChange={(e)=>{this.setState({...this.state, selectedVariant: e.target.value})}}
+                              onChange={(e)=>{e.stopPropagation(); this.setState({...this.state, selectedVariant: e.target.value})}}
                             >
-                                <option>wdfa</option>
+                                {
+                                  product.variant.variantValues.map(varr=>{
+                                    return <option>{varr}</option>
+                                  })
+                                }
                             </select>
                           </div>
                         </div> : <></>
@@ -175,7 +181,7 @@ class ProductPage extends React.PureComponent {
                           text='Add To Bag'
                           className='bag-btn'
                           icon={<BagIcon />}
-                          onClick={() => handleAddToCart(product)}
+                          onClick={() => handleAddToCart(product, this.state.selectedVariant)}
                         />
                       )}
                     </div>

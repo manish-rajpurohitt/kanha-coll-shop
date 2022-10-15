@@ -24,6 +24,9 @@ const OrderSchema = new Schema({
   updates:{
     type:String
   },
+  selectedAddress:{
+    type:String
+  },
   updated: Date,
   created: {
     type: Date,

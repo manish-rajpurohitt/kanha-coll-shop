@@ -23,7 +23,8 @@ router.post('/add', auth, async (req, res) => {
     const order = new Order({
       cart,
       user,
-      total
+      total,
+      selectedAddress: req.body.selectedAddress
     });
     
     let body = {
@@ -319,12 +320,14 @@ router.get('/:orderId', auth, async (req, res) => {
         }
       });
     }
+    console.log(orderDoc)
 
     if (!orderDoc || !orderDoc.cart) {
       return res.status(404).json({
         message: `Cannot find order with the id: ${orderId}.`
       });
     }
+
 
     let order = {
       _id: orderDoc._id,
@@ -335,7 +338,9 @@ router.get('/:orderId', auth, async (req, res) => {
       cartId: orderDoc.cart._id,
       paymentStatus: orderDoc?.paymentStatus,
       paymentLink: orderDoc?.paymentLink,
-      updates: orderDoc?.updates
+      updates: orderDoc?.updates,
+      selectedAddress: orderDoc.selectedAddress,
+      userId: orderDoc.cart.user
     };
 
     order = store.caculateTaxAmount(order);

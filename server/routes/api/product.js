@@ -93,7 +93,7 @@ router.get('/list', async (req, res) => {
 
     const categoryFilter = category ? { category } : {};
     const basicQuery = getStoreProductsQuery(min, max, rating);
-
+    
     const userDoc = await checkAuth(req);
     const categoryDoc = await Category.findOne(
       { slug: categoryFilter.category, isActive: true },
@@ -113,6 +113,7 @@ router.get('/list', async (req, res) => {
 
     let products = null;
     const productsCount = await Product.aggregate(basicQuery);
+
     const count = productsCount.length;
     const size = count > limit ? page - 1 : 0;
     const currentPage = count > limit ? Number(page) : 1;
@@ -124,14 +125,17 @@ router.get('/list', async (req, res) => {
       { $limit: limit * 1 }
     ];
 
+
     if (userDoc) {
       const wishListQuery = getStoreProductsWishListQuery(userDoc.id).concat(
         basicQuery
       );
+      console.log(wishListQuery.concat(paginateQuery));
       products = await Product.aggregate(wishListQuery.concat(paginateQuery));
     } else {
       products = await Product.aggregate(basicQuery.concat(paginateQuery));
     }
+
 
     res.status(200).json({
       products,

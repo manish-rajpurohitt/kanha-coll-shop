@@ -28,11 +28,12 @@ import { allFieldsValidation } from '../../utils/validation';
 import { toggleCart } from '../Navigation/actions';
 
 // Handle Add To Cart
-export const handleAddToCart = product => {
+export const handleAddToCart = (product, variant) => {
   return (dispatch, getState) => {
     product.quantity = Number(getState().product.productShopData.quantity);
     product.totalPrice = product.quantity * product.price;
     product.totalPrice = parseFloat(product.totalPrice.toFixed(2));
+    product.variantSelected = variant
     const inventory = getState().product.storeProduct.inventory;
 
     const result = calculatePurchaseQuantity(inventory);
@@ -199,6 +200,7 @@ const getCartItems = cartItems => {
     newItem.price = item.price;
     newItem.taxable = item.taxable;
     newItem.product = item._id;
+    newItem.variantSelected = item.variantSelected
     newCartItems.push(newItem);
   });
 
@@ -216,3 +218,41 @@ const calculatePurchaseQuantity = inventory => {
     return 50;
   }
 };
+
+export const fetchDefaultAddress = () => {
+  return async (dispatch, getState) => {
+    try {
+      // create cart id if there is no one
+        const response = await axios.get(`/api/address`);
+        console.log(response)
+        return response.data;
+    } catch (error) {
+      handleError(error, dispatch);
+    }
+  };
+}
+
+export const handleAddress = () => {
+  return (dispatch, getState) => {
+    dispatch(push('/dashboard/address/add'));
+    dispatch(toggleCart());
+  };
+}
+
+export const getMyDetails = () =>{
+  return async (dispatch, getState) => {
+    try{
+      const response = await axios.get(`/api/user/me`)
+      return response.data
+    }catch(ex){
+      handleError(ex, dispatch)
+    }
+  }
+}
+
+export const handleUserDetails = () => {
+  return (dispatch, getState) => {
+    dispatch(push('/dashboard'));
+    dispatch(toggleCart());
+  };
+}

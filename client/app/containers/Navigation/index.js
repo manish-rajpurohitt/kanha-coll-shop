@@ -124,7 +124,8 @@ class Navigation extends React.PureComponent {
       suggestions,
       onSearch,
       onSuggestionsFetchRequested,
-      onSuggestionsClearRequested
+      onSuggestionsClearRequested,
+      fetchDefaultAddress
     } = this.props;
 
     const inputProps = {
