@@ -22,10 +22,8 @@ router.post("/webhook", async (req, res) => {
         req.body.entry[0].changes[0].value.messages && 
         req.body.entry[0].changes[0].value.messages[0]
       ) {
-        let phone_number_id =
-          req.body.entry[0].changes[0].value.metadata.phone_number_id;
-        let from = req.body.entry[0].changes[0].value.messages[0].from; // extract the phone number from the webhook payload
         let msg_body = req.body.entry[0].changes[0].value.messages[0] // extract the message text from the webhook payload
+        if(msg_body.type !== "image") return;
          let imgid = msg_body.image.id;
         console.log(msg_body, imgid);
         
