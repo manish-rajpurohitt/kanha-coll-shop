@@ -1,15 +1,10 @@
 const express = require('express');
 const router = express.Router();
 
-router.post('/test', async (req, res) => {
-  try {
-        console.log("whatsapp webhook working")
-      } catch (error) {
-    console.log(error)
-    res.status(400).json({
-      error: 'Your request could not be processed. Please try again.'
-    });
-  }
+
+router.post('/webhook', async (req, res) => {
+    console.log('Incoming webhook: ' + JSON.stringify(req.body));
+    response.sendStatus(200);
 });
 
 module.exports = router;
