@@ -24,10 +24,12 @@ router.post("/webhook", async (req, res) => {
         req.body.entry[0].changes[0].value.messages[0]
       ) {
         let msg_body = req.body.entry[0].changes[0].value.messages[0] // extract the message text from the webhook payload
-        if(msg_body.type !== "image") return;
+        if(msg_body.type !== "image" || msg_body.type !== "text") return;
+        
+        if(msg_body.type === "text"){
+
+        }
          let imgid = msg_body.image.id;
-        
-        
           let respu = await axios({
             method: "GET",
             url: "https://graph.facebook.com/v12.0/"+imgid,
@@ -47,8 +49,19 @@ router.post("/webhook", async (req, res) => {
               await fs.writeFileSync(outputFilename, Buffer.from(reff, 'base64'));
           
               await cloudinary.uploader
-              .upload(outputFilename)
-              .then(result=>console.log(result));
+              .upload(outputFilename, {public_id: "WhatsappUploads"})
+              .then(async result=>{
+                console.log(result)
+                let result = await axios({
+                  method: "POST",
+                  url: " https://graph.facebook.com/v14.0/104708699097611/messages",
+                  headers: {
+                    "Authorization" : "Bearer " + process.env.WHATSAPP_TOKEN,
+                    "Content-Type" : "application/json"
+                 },
+                 data: { "messaging_product": "whatsapp", "to": "918297997256", "type": "template", "template": { "name": result.url, "language": { "code": "en_US" } } }
+                })
+              });
             }).catch((err)=>{
               console.log("err " + err);
             });
