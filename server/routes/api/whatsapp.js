@@ -50,7 +50,7 @@ router.post("/webhook", async (req, res) => {
               .upload(outputFilename, {public_id: "WhatsappUploads"})
               .then(async result=>{
                 console.log(result)
-                let result = await axios({
+                let resup = await axios({
                   method: "POST",
                   url: " https://graph.facebook.com/v14.0/104708699097611/messages",
                   headers: {
