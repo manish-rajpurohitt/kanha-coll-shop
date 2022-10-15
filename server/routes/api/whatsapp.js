@@ -2,14 +2,16 @@ const express = require('express');
 const router = express.Router();
 const axios = require("axios");
 // Imports dependencies and set up http server
-const request = require("request")
+const request = require("request");
+const { Readable } = require("stream");
+  const cloudinary = require("cloudinary").v2;
 
 router.post("/webhook", async (req, res) => {
     // Parse the request body from the POST
     let body = req.body;
   
     // Check the Incoming webhook message
-    console.log(JSON.stringify(req.body, null, 2));
+   // console.log(JSON.stringify(req.body, null, 2));
   
     // info on WhatsApp text message payload: https://developers.facebook.com/docs/whatsapp/cloud-api/webhooks/payload-examples#text-messages
     if (req.body.object) {
@@ -25,28 +27,33 @@ router.post("/webhook", async (req, res) => {
         let from = req.body.entry[0].changes[0].value.messages[0].from; // extract the phone number from the webhook payload
         let msg_body = req.body.entry[0].changes[0].value.messages[0] // extract the message text from the webhook payload
          let imgid = msg_body.image.id;
-          let res = await axios({
-            method: "GET",
-            url: "https://graph.facebook.com/v15.0/"+imgid,
-            headers: { "Authorization" : "Bearer " + token}
-          });
-          console.log(res);
+        console.log(msg_body, imgid);
         
-        axios({
-          method: "POST", // Required, HTTP method, a string, e.g. POST, GET
-          url:
-            "https://graph.facebook.com/v12.0/" +
-          
-            phone_number_id +
-            "/messages?access_token=" +
-            token,
-          data: {
-            messaging_product: "whatsapp",
-            to: from,
-            text: { body: "Ack: " + msg_body },
-          },
-          headers: { "Content-Type": "application/json" },
-        });
+          let respu = await axios({
+            method: "GET",
+            url: "https://graph.facebook.com/v12.0/"+imgid,
+            headers: { "Authorization" : "Bearer " + token}
+          }).then(async data=>{
+            //console.log(data);
+              await axios({
+              method: "GET",
+              url: data.data.url,
+              headers: { "Authorization" : "Bearer " + token}, 
+            },{
+                responseType: 'arraybuffer'
+              }).then(async resData=>{
+                const outputFilename = 'file.jpg'
+                await fs.writeFileSync(outputFilename, resData.data);
+                let res = await uploadFronBuffer(outputFilename);
+                console.log(res);
+            }).catch(()=>{
+  
+            });
+            
+          }).catch(()=>{
+            
+          });
+      
       }
       res.sendStatus(200);
     } else {
@@ -82,5 +89,34 @@ router.get("/webhook", (req, res) => {
     }
   });
   
+  const bufferToStream = (buffer) => {
+    const readable = new Readable({
+      read() {
+        this.push(buffer);
+        this.push(null);
+      },
+    });
+    return readable;
+  }
+  
+  
+  const uploadFronBuffer = (image) => {
+    return new Promise((resolve, reject) => {
+      const stream = cloudinary.uploader.upload_stream(
+        { folder: "DEV" },
+        (err, result) => {
+          if (result) {
+            console.log("uploading" + result);
+            
+            resolve(result);
+          } else {
+            reject(err);
+           }
+        }
+      );
+  
+      bufferToStream(image.buffer).pipe(stream)
+    });
+  }
 
 module.exports = router;
