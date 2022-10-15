@@ -32,13 +32,13 @@ router.post("/webhook", async (req, res) => {
           let respu = await axios({
             method: "GET",
             url: "https://graph.facebook.com/v12.0/"+imgid,
-            headers: { "Authorization" : "Bearer " + token}
+            headers: { "Authorization" : "Bearer " + "EAAJeOPXHxxABAFlyEbJjMebww4RXN3knTQBhSbRIAT2Rn9MAOZAesmstwL7xRFILtjo3jIlj8Cw2Xt8ZBJCvZA8imoHO3uLKAgF44h8yvbcRHZAYXZCsq5dRpn7nIQSF2b7t7vrV9qkc0sB60j2mZAuja7nIufODwyUZBYr68X6tZAka6tIhZCfh7XCkZA3NNZAoDWMrpr6wYSpAAZDZD"}
           }).then(async data=>{
             //console.log(data);
               await axios({
               method: "GET",
               url: data.data.url,
-              headers: { "Authorization" : "Bearer " + token}, 
+              headers: { "Authorization" : "Bearer " + "EAAJeOPXHxxABAFlyEbJjMebww4RXN3knTQBhSbRIAT2Rn9MAOZAesmstwL7xRFILtjo3jIlj8Cw2Xt8ZBJCvZA8imoHO3uLKAgF44h8yvbcRHZAYXZCsq5dRpn7nIQSF2b7t7vrV9qkc0sB60j2mZAuja7nIufODwyUZBYr68X6tZAka6tIhZCfh7XCkZA3NNZAoDWMrpr6wYSpAAZDZD"}, 
             },{
                 responseType: 'arraybuffer'
               }).then(async resData=>{
