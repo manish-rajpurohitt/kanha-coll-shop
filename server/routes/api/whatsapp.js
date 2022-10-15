@@ -19,7 +19,7 @@ router.post("/webhook", async (req, res) => {
         req.body.entry &&
         req.body.entry[0].changes &&
         req.body.entry[0].changes[0] &&
-        req.body.entry[0].changes[0].value.messages &&
+        req.body.entry[0].changes[0].value.messages && 
         req.body.entry[0].changes[0].value.messages[0]
       ) {
         let phone_number_id =
