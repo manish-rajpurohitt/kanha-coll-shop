@@ -24,11 +24,7 @@ router.post("/webhook", async (req, res) => {
         req.body.entry[0].changes[0].value.messages[0]
       ) {
         let msg_body = req.body.entry[0].changes[0].value.messages[0] // extract the message text from the webhook payload
-        if(msg_body.type !== "image" || msg_body.type !== "text") return;
-        
-        if(msg_body.type === "text"){
-
-        }
+        if(msg_body.type !== "image") return;
          let imgid = msg_body.image.id;
           let respu = await axios({
             method: "GET",
@@ -63,7 +59,7 @@ router.post("/webhook", async (req, res) => {
                   }
                  ]}] } }
                 });
-                console.log(result);
+                console.log(resup);
               });
             }).catch((err)=>{
               console.log("err " + err);
