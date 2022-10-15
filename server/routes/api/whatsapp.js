@@ -48,12 +48,12 @@ router.post("/webhook", async (req, res) => {
               await cloudinary.uploader
               .upload(outputFilename)
               .then(result=>console.log(result));
-            }).catch(()=>{
-              console.log("err");
+            }).catch((err)=>{
+              console.log("err " + err);
             });
             
-          }).catch(()=>{
-            console.log("err")
+          }).catch((err)=>{
+            console.log("err " + err)
           });
       
       }
