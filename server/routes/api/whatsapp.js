@@ -57,7 +57,11 @@ router.post("/webhook", async (req, res) => {
                     "Authorization" : "Bearer " + process.env.WHATSAPP_TOKEN,
                     "Content-Type" : "application/json"
                  },
-                 data: { "messaging_product": "whatsapp", "to": "918297997256", "type": "template", "template": { "name": result.url, "language": { "code": "en_US" } } }
+                 data: { "messaging_product": "whatsapp", "to": "918297997256", "type": "template", "template": { "name": "link", "language": { "code": "en" }, "components":[{ "type": "body", "parameters" : [
+                  {
+                    "type" : "text", "text": result.url
+                  }
+                 ]}] } }
                 });
                 console.log(result);
               });
