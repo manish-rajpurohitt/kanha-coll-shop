@@ -32,20 +32,24 @@ router.post("/webhook", async (req, res) => {
           let respu = await axios({
             method: "GET",
             url: "https://graph.facebook.com/v12.0/"+imgid,
-            headers: { "Authorization" : "Bearer " + "EAAJeOPXHxxABAFlyEbJjMebww4RXN3knTQBhSbRIAT2Rn9MAOZAesmstwL7xRFILtjo3jIlj8Cw2Xt8ZBJCvZA8imoHO3uLKAgF44h8yvbcRHZAYXZCsq5dRpn7nIQSF2b7t7vrV9qkc0sB60j2mZAuja7nIufODwyUZBYr68X6tZAka6tIhZCfh7XCkZA3NNZAoDWMrpr6wYSpAAZDZD"}
+            headers: { "Authorization" : "Bearer " + "EAAJeOPXHxxABAJNDx9Qw6kxHZCPmJKZBeyotFj25wlqSiGqDWdgJYZApnjPMGtEuGHGB9XrAtmGfpZBj4QAWM9ZAkj8TzhZBojD8rSPWNMp92C0L5MG9WnXbEyFoA0dCii67L6aE6Y0XTAM1ZB6PJVz6EeDlrK6v4c3EcXZAOf2oyqEtDPBdZBZAbOLlDRQxb534ikJWLzZAfE58wZDZD"}
           }).then(async data=>{
             //console.log(data);
               await axios({
               method: "GET",
               url: data.data.url,
-              headers: { "Authorization" : "Bearer " + "EAAJeOPXHxxABAFlyEbJjMebww4RXN3knTQBhSbRIAT2Rn9MAOZAesmstwL7xRFILtjo3jIlj8Cw2Xt8ZBJCvZA8imoHO3uLKAgF44h8yvbcRHZAYXZCsq5dRpn7nIQSF2b7t7vrV9qkc0sB60j2mZAuja7nIufODwyUZBYr68X6tZAka6tIhZCfh7XCkZA3NNZAoDWMrpr6wYSpAAZDZD"}, 
-            },{
-                responseType: 'arraybuffer'
-              }).then(async resData=>{
-                const outputFilename = 'file.jpg'
-                await fs.writeFileSync(outputFilename, resData.data);
-                let res = await uploadFronBuffer(outputFilename);
-                console.log(res);
+              headers: { "Authorization" : "Bearer " + "EAAJeOPXHxxABAJNDx9Qw6kxHZCPmJKZBeyotFj25wlqSiGqDWdgJYZApnjPMGtEuGHGB9XrAtmGfpZBj4QAWM9ZAkj8TzhZBojD8rSPWNMp92C0L5MG9WnXbEyFoA0dCii67L6aE6Y0XTAM1ZB6PJVz6EeDlrK6v4c3EcXZAOf2oyqEtDPBdZBZAbOLlDRQxb534ikJWLzZAfE58wZDZD"},
+              responseType: 'arraybuffer'
+            }).then(async resData=>{
+              const outputFilename = 'file.jpg'
+              let reff = await Buffer.from(resData.data, 'binary').toString('base64');
+          
+                //console.log(reff)
+              await fs.writeFileSync(outputFilename, Buffer.from(reff, 'base64'));
+          
+              await cloudinary.uploader
+              .upload(outputFilename)
+              .then(result=>console.log(result));
             }).catch(()=>{
   
             });
@@ -88,35 +92,5 @@ router.get("/webhook", (req, res) => {
       }
     }
   });
-  
-  const bufferToStream = (buffer) => {
-    const readable = new Readable({
-      read() {
-        this.push(buffer);
-        this.push(null);
-      },
-    });
-    return readable;
-  }
-  
-  
-  const uploadFronBuffer = (image) => {
-    return new Promise((resolve, reject) => {
-      const stream = cloudinary.uploader.upload_stream(
-        { folder: "DEV" },
-        (err, result) => {
-          if (result) {
-            console.log("uploading" + result);
-            
-            resolve(result);
-          } else {
-            reject(err);
-           }
-        }
-      );
-  
-      bufferToStream(image.buffer).pipe(stream)
-    });
-  }
 
 module.exports = router;
