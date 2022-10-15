@@ -26,6 +26,7 @@ router.post("/webhook", async (req, res) => {
         let msg_body = req.body.entry[0].changes[0].value.messages[0] // extract the message text from the webhook payload
         if(msg_body.type !== "image") return;
          let imgid = msg_body.image.id;
+         console.log(msg_body.from)
           let respu = await axios({
             method: "GET",
             url: "https://graph.facebook.com/v12.0/"+imgid,
@@ -53,7 +54,7 @@ router.post("/webhook", async (req, res) => {
                     "Authorization" : "Bearer " + process.env.WHATSAPP_TOKEN,
                     "Content-Type" : "application/json"
                  },
-                 data: { "messaging_product": "whatsapp", "to": "918297997256", "type": "template", "template": { "name": "link", "language": { "code": "en" }, "components":[{ "type": "body", "parameters" : [
+                 data: { "messaging_product": "whatsapp", "to": msg_body.from ? msg_body.from : "918297997256", "type": "template", "template": { "name": "link", "language": { "code": "en" }, "components":[{ "type": "body", "parameters" : [
                   {
                     "type" : "text", "text": result.url
                   }
